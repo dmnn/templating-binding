@@ -222,7 +222,7 @@ define(['exports', 'aurelia-logging', 'aurelia-binding', 'aurelia-templating'], 
     }
 
     TemplatingBindingLanguage.prototype.inspectAttribute = function inspectAttribute(resources, attrName, attrValue) {
-      var parts = attrName.split('.');
+      var parts = attrName.split('-');
 
       info.defaultBindingMode = null;
 

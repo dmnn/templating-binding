@@ -243,7 +243,7 @@ export class TemplatingBindingLanguage extends BindingLanguage {
   }
 
   inspectAttribute(resources, attrName, attrValue){
-    var parts = attrName.split('.');
+    var parts = attrName.split('-');
 
     info.defaultBindingMode = null;
 

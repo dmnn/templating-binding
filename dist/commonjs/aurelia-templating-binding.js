@@ -231,7 +231,7 @@ var TemplatingBindingLanguage = (function (_BindingLanguage) {
   }
 
   TemplatingBindingLanguage.prototype.inspectAttribute = function inspectAttribute(resources, attrName, attrValue) {
-    var parts = attrName.split('.');
+    var parts = attrName.split('-');
 
     info.defaultBindingMode = null;
 
