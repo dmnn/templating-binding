@@ -219,17 +219,32 @@ define(['exports', 'aurelia-logging', 'aurelia-binding', 'aurelia-templating'], 
         'scrollleft': 'scrollLeft',
         'readonly': 'readOnly'
       };
+      this.knownBindings = [{
+        'bind': ['bind'],
+        'trigger': ['trigger'],
+        'delegate': ['delegate'],
+        'for': ['for']
+      }, {
+        'one-way': ['one', 'way'],
+        'two-way': ['two', 'way'],
+        'one-time': ['one', 'time']
+      }];
     }
 
     TemplatingBindingLanguage.prototype.inspectAttribute = function inspectAttribute(resources, attrName, attrValue) {
-      var parts = attrName.split('-');
+      var _this = this;
+
+      var parts = attrName.split('-'),
+          command = [parts.pop()];
 
       info.defaultBindingMode = null;
 
-      if (parts.length == 2) {
-        info.attrName = parts[0].trim();
+      if (parts.length == 1 && Object.keys(this.knownBindings[0]).includes(command[0]) || parts.length > 1 && command.push(parts.pop()) == 2 && Object.keys(this.knownBindings[1]).some(function (key) {
+        return _this.knownBindings[1][key] === command;
+      })) {
+        info.attrName = parts.join('-').trim();
         info.attrValue = attrValue;
-        info.command = parts[1].trim();
+        info.command = command.join('-').trim();
 
         if (info.command === 'ref') {
           info.expression = new _aureliaBinding.NameExpression(attrValue, info.attrName);
@@ -412,7 +427,7 @@ define(['exports', 'aurelia-logging', 'aurelia-binding', 'aurelia-templating'], 
     };
 
     InterpolationBinding.prototype.partChanged = function partChanged(newValue, oldValue, connecting) {
-      var _this = this;
+      var _this2 = this;
 
       var map, info;
       if (!connecting) {
@@ -436,7 +451,7 @@ define(['exports', 'aurelia-logging', 'aurelia-binding', 'aurelia-templating'], 
           info = {
             refs: 0,
             dispose: this.observerLocator.getArrayObserver(newValue).subscribe(function () {
-              return _this.setValue();
+              return _this2.setValue();
             })
           };
           map.set(newValue, info);
